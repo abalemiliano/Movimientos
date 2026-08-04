@@ -7,8 +7,10 @@ Una aplicación móvil diseñada para el control diario de ingresos y egresos pe
 ## Capturas de Pantalla
 
 | Pantalla Principal Dashboard | Historial de Movimientos y Filtros | Alta de Rubro |
-| :---: | :---: | :---: |
-| !(https://drive.google.com/file/d/1M9FoUW3n5ux7yLcWhW_XS4XqlvmPPvFD/view?usp=sharing) | !(https://drive.google.com/file/d/1KlPWFpRRnoVZ0V8T2TZXxBa34nbBzFOI/view?usp=sharing) | !(https://drive.google.com/file/d/1Al70G7aWpaFqazWzNO_hXkEJNhX9t9h-/view?usp=sharing) |
+| --- | --- | --- |
+| ![Dashboard](https://github.com/user-attachments/assets/10f7e5a2-0072-41e8-8a7c-c50780e6f431)
+ | ![Movimientos](https://github.com/user-attachments/assets/f2214d89-a395-4763-a954-54536fa1e2d1)
+ | ![Rubro](https://github.com/user-attachments/assets/a45e97e2-3879-40e5-9bb6-490df7d466d0) |
 
 ---
 
