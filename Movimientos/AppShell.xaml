@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Movimientos.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:Movimientos.Views"
+    Title="Movimientos">
+
+    <FlyoutItem Title="Dashboard"
+                Icon="dashboard_24dp_000000.png">
+        <ShellContent ContentTemplate="{DataTemplate views:DashboardPage}"
+                      Route="DashboardPage" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Movimientos"
+                Icon="arrow_up_down_24dp_000000.png">
+        <Tab Title="Nuevo"
+             Icon="add_24dp_000000.png">
+            <ShellContent ContentTemplate="{DataTemplate views:MovimientoPage}"
+                          Route="MovimientoPage"/>
+        </Tab>
+        <Tab Title="Listado"
+             Icon="list_24dp_000000.png">
+            <ShellContent ContentTemplate="{DataTemplate views:MovimientosPage}"
+                          Route="MovimientosPage"/>
+        </Tab>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Rubros"
+                Icon="wallet_24dp_000000.png">
+        <Tab Title="Nuevo"
+             Icon="add_24dp_000000.png">
+            <ShellContent ContentTemplate="{DataTemplate views:RubroPage}"
+                          Route="RubroPage"/>
+        </Tab>
+        <Tab Title="Listado"
+             Icon="list_24dp_000000.png">
+            <ShellContent ContentTemplate="{DataTemplate views:RubrosPage}"
+                          Route="RubrosPage"/>
+        </Tab>
+    </FlyoutItem>
+
+</Shell>

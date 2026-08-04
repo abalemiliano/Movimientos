@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Movimientos.Views.DashboardPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:controls="clr-namespace:Movimientos.Views.Controls"
+             xmlns:modelDTO="clr-namespace:Movimientos.Models.DTOs"
+             xmlns:viewmodel="clr-namespace:Movimientos.ViewModels"
+             x:DataType="viewmodel:DashboardViewModel"
+             x:Name="Dashboard"
+             Title="Dashboard">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing"
+                                        BindingContext="{Binding Path=BindingContext, Source={x:Reference Dashboard}, x:DataType=ContentPage}"
+                                        Command="{Binding AppearingCommand}"/>
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <Shadow x:Key="ChartContainerShadow"
+                Brush="{StaticResource SurfaceContainerLightBrush}"
+                Radius="3"
+                Opacity="0.3"
+                Offset="5,5"/>
+    </ContentPage.Resources>
+
+    <Grid Padding="5">
+        <ScrollView>
+            <Grid RowDefinitions="Auto,Auto,Auto"
+                  RowSpacing="20"
+                  ColumnDefinitions="*,*"
+                  Padding="15">
+
+                <Picker Grid.Row="0" Grid.Column="0"
+                        Title="Mes"
+                        HorizontalTextAlignment="Center"
+                        ItemsSource="{Binding Meses}"
+                        ItemDisplayBinding="{Binding Nombre}"
+                        SelectedItem="{Binding MesSeleccionado}"
+                        IsEnabled="{Binding IsNotBusy}"/>
+
+                <Picker Grid.Row="0" Grid.Column="1"
+                        Title="Año"
+                        HorizontalTextAlignment="Center"
+                        ItemsSource="{Binding Anios}"
+                        SelectedItem="{Binding AnioSeleccionado}"
+                        IsEnabled="{Binding IsNotBusy}"/>
+
+                <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                        Style="{StaticResource ChartContainer}"
+                        Shadow="{StaticResource ChartContainerShadow}">
+                    <Grid RowDefinitions="Auto,Auto,Auto"
+                          RowSpacing="5"
+                          ColumnDefinitions="Auto,*"
+                          ColumnSpacing="3">
+
+                        <ActivityIndicator Grid.Row="0" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="2"
+                                           IsVisible="{Binding IsBusy}"
+                                           IsRunning="{Binding IsBusy}"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"/>
+
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Text="Saldo mes actual"
+                               VerticalOptions="Center"
+                               IsVisible="{Binding IsNotBusy}"/>
+                        
+                        <Label Grid.Row="0" Grid.Column="1"
+                               Text="{Binding Saldo, StringFormat='{} $ {0:F2}'}"
+                               FontAttributes="Bold"
+                               FontSize="18"
+                               HorizontalOptions="End"
+                               IsVisible="{Binding IsNotBusy}"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                               Text="Balance Mensual"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"
+                               IsVisible="{Binding IsNotBusy}"/>
+
+                        <CollectionView Grid.Row="2" Grid.Column="0"
+                                        ItemsSource="{Binding Balance}"
+                                        VerticalOptions="Center">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical"
+                                                   ItemSpacing="10"/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="modelDTO:BalanceDTO">
+                                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                        <BoxView Color="{Binding Color}"
+                                                 WidthRequest="10"
+                                                 HeightRequest="10"
+                                                 VerticalOptions="Center"/>
+                                        <Label Text="{Binding Nombre}"/>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <controls:BarChart Grid.Row="2" Grid.Column="1"
+                                           Items="{Binding Balance}"
+                                           HeightRequest="250"
+                                           WidthRequest="250"/>
+
+                        <Image Grid.Row="2" Grid.Column="1"
+                               Source="data_info_alert_128dp_000000.png"
+                               WidthRequest="100"
+                               HeightRequest="100"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               IsVisible="{Binding BarChartOff}"/>
+
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                        Style="{StaticResource ChartContainer}"
+                        Shadow="{StaticResource ChartContainerShadow}">
+                    <Grid RowDefinitions="Auto,Auto,Auto"
+                          RowSpacing="5">
+                        <ActivityIndicator Grid.Row="0" Grid.RowSpan="3"
+                                           IsVisible="{Binding IsBusy}"
+                                           IsRunning="{Binding IsBusy}"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"/>
+
+                        <Label Grid.Row="0"
+                               Text="Gastos por Rubro"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"
+                               IsVisible="{Binding IsNotBusy}"/>
+
+                        <controls:DonutChart Grid.Row="1"
+                                             Items="{Binding GastosPorRubro}"
+                                             HeightRequest="250"
+                                             WidthRequest="250"
+                                             IsVisible="{Binding IsNotBusy}"
+                                             HorizontalOptions="Center"/>
+
+                        <Image Grid.Row="1"
+                               Source="data_info_alert_128dp_000000.png"
+                               WidthRequest="100"
+                               HeightRequest="100"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               IsVisible="{Binding DonutChartOff}"/>
+
+                        <CollectionView Grid.Row="2"
+                                        EmptyView=""
+                                        ItemsSource="{Binding GastosPorRubro}"
+                                        IsVisible="{Binding IsNotBusy}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="modelDTO:ResumenRubroDTO">
+                                    <Border Stroke="{StaticResource White}"
+                                            Background="{StaticResource White}"
+                                            Padding="5">
+                                        <Grid ColumnDefinitions="*,2*,2*"
+                                              ColumnSpacing="5">
+                                            <BoxView Grid.Column="0"
+                                                     WidthRequest="20"
+                                                     HeightRequest="20"
+                                                     CornerRadius="10"
+                                                     Color="{Binding Color}"
+                                                     BackgroundColor="Transparent"
+                                                     VerticalOptions="Center"
+                                                     HorizontalOptions="Center"/>
+                                            <Label Grid.Column="1"
+                                                   Text="{Binding Nombre}"/>
+                                            <Label Grid.Column="2"
+                                                   Text="{Binding Total, StringFormat='{} $ {0:N2}'}"
+                                                   HorizontalOptions="End"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                    </Grid>
+                </Border>
+
+            </Grid>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

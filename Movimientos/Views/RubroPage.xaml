@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Movimientos.Views.RubroPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:colorpicker="clr-namespace:Maui.ColorPicker;assembly=Maui.ColorPicker"
+             xmlns:viewmodel="clr-namespace:Movimientos.ViewModels"
+             x:DataType="viewmodel:RubroViewModel"
+             x:Name="Rubro"
+             Title="Nuevo Rubro">
+
+    <Grid RowDefinitions="*,Auto"
+          RowSpacing="5"
+          Padding="20">
+        
+        <ScrollView Grid.Row="0">
+
+            <VerticalStackLayout Spacing="15">
+
+                <Entry Text="{Binding Nombre, Mode=TwoWay}"
+                       Placeholder="Nombre"
+                       PlaceholderColor="Gray"/>
+
+                <Editor Text="{Binding Detalle, Mode=TwoWay}"
+                        Placeholder="Descripcion"
+                        PlaceholderColor="Gray"
+                        HeightRequest="100"/>
+
+                <HorizontalStackLayout Spacing="10"
+                                       RadioButtonGroup.GroupName="Tipo"
+                                       RadioButtonGroup.SelectedValue="{Binding EsIngreso, Mode=TwoWay}">
+                    <Label Text="Tipo:"
+                           VerticalOptions="Center"/>
+                    <RadioButton Content="Ingreso"
+                                 Value="true"/>
+                    <RadioButton Content="Egreso"
+                                 Value="false"/>
+                </HorizontalStackLayout>
+
+                <Label Text="Seleccione un color"/>
+            
+                <colorpicker:ColorPicker x:Name="ColorPicker"
+                                         HeightRequest="200"
+                                         PickedColorChanged="ColorPicker_PickedColorChanged"/>
+
+                <Grid ColumnDefinitions="*,Auto"
+                      ColumnSpacing="5">
+                    <Label Grid.Column="0"
+                           Text="Vista previa color seleccionado"
+                           VerticalOptions="Center"/>
+                    <BoxView Grid.Column="1"
+                             x:Name="ColorPreview" 
+                             HeightRequest="30" 
+                             WidthRequest="150" 
+                             Color="Transparent"/>
+                </Grid>
+
+            </VerticalStackLayout>
+        
+        </ScrollView>
+
+        <Grid Grid.Row="1">
+
+            <Button Text="{Binding TextGuardar, Mode=TwoWay}"
+                    Command="{Binding GuardarCommand}"
+                    IsEnabled="{Binding IsNotBusy}"
+                    HeightRequest="50"
+                    CornerRadius="10" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               HeightRequest="35"
+                               WidthRequest="35"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

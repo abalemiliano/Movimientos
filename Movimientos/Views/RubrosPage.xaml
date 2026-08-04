@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Movimientos.Views.RubrosPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:converters="clr-namespace:Movimientos.Converters"
+             xmlns:model="clr-namespace:Movimientos.Models"
+             xmlns:viewmodel="clr-namespace:Movimientos.ViewModels"
+             x:DataType="viewmodel:RubrosViewModel"
+             x:Name="ListaRubros"
+             Title="Rubros">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing"
+                                        BindingContext="{Binding Path=BindingContext, Source={x:Reference ListaRubros}, x:DataType=ContentPage}"
+                                        Command="{Binding AppearingCommand}"/>
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <converters:BoolToStringConverter x:Key="BoolToString"/>
+    </ContentPage.Resources>
+
+    <Grid Padding="5">
+        <CollectionView x:Name="Lista"
+                        EmptyView="{Binding TextEmptyView}"
+                        ItemsSource="{Binding Rubros}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="8"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Rubro">
+                    <Border StrokeThickness="0"
+                            Background="{StaticResource White}">
+                        <Grid ColumnDefinitions="Auto,*,Auto"
+                              ColumnSpacing="10">
+                            <BoxView Grid.Column="0"
+                                     Color="{Binding Color}"
+                                     BackgroundColor="Transparent"
+                                     WidthRequest="30"
+                                     HeightRequest="30"
+                                     CornerRadius="15"/>
+                            <Label Grid.Column="1"
+                                   Text="{Binding Nombre}"
+                                   FontSize="18"
+                                   VerticalOptions="Center"/>
+                            <Label Grid.Column="2"
+                                   Text="{Binding EsIngreso, Converter={StaticResource BoolToString}, StringFormat='{}Es ingreso: {0}'}"
+                                   FontSize="16"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+    
+</ContentPage>

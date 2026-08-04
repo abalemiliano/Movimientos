@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Movimientos.Views.MovimientoPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:behaviors="clr-namespace:Movimientos.Behaviors"
+             xmlns:viewmodel="clr-namespace:Movimientos.ViewModels"
+             x:DataType="viewmodel:MovimientoViewModel"
+             x:Name="NuevoMovimiento"
+             Title="Nuevo Movimiento">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing"
+                                        BindingContext="{Binding Path=BindingContext, Source={x:Reference NuevoMovimiento}, x:DataType=ContentPage}"
+                                        Command="{Binding AppearingCommand}"/>
+    </ContentPage.Behaviors>
+
+    <Grid RowDefinitions="*,Auto"
+          Padding="20">
+        
+        <ScrollView Grid.Row="0">
+
+            <VerticalStackLayout Spacing="15">
+
+                <Grid ColumnDefinitions="Auto,*"
+                      ColumnSpacing="5">
+                    <Label Grid.Column="0"
+                           Text="Rubro"
+                           VerticalOptions="Center"/>
+                    <Picker Grid.Column="1"
+                            Title="Seleccione Rubro"
+                            ItemsSource="{Binding Rubros}"
+                            ItemDisplayBinding="{Binding Nombre}"
+                            SelectedItem="{Binding RubroSeleccionado, Mode=TwoWay}"/>
+                </Grid>
+
+                <Editor Text="{Binding Detalle, Mode=TwoWay}"
+                        Placeholder="Descripción del movimiento"
+                        HeightRequest="150"/>
+
+                <Entry Text="{Binding Importe, Mode=TwoWay}"
+                       Placeholder="Importe"
+                       Keyboard="Numeric"
+                       MaxLength="15">
+                    <Entry.Behaviors>
+                        <behaviors:DecimalBehavior />
+                    </Entry.Behaviors>
+                </Entry>
+
+                <DatePicker Date="{Binding Fecha, Mode=TwoWay}"
+                            Format="dd/MM/yyyy"/>
+                
+            </VerticalStackLayout>
+            
+        </ScrollView>
+
+        <Grid Grid.Row="1"
+              Margin="0,10,0,0">
+
+            <Button Text="{Binding TextGuardar}"
+                    Command="{Binding GuardarCommand}"
+                    IsEnabled="{Binding IsNotBusy}"
+                    HeightRequest="50"
+                    CornerRadius="10" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               HeightRequest="35"
+                               WidthRequest="35"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+        </Grid>
+        
+    </Grid>
+
+</ContentPage>

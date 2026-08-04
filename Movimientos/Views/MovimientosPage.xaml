@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Movimientos.Views.MovimientosPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:converters="clr-namespace:Movimientos.Converters"
+             xmlns:modelDTO="clr-namespace:Movimientos.Models.DTOs"
+             xmlns:viewmodel="clr-namespace:Movimientos.ViewModels"
+             x:DataType="viewmodel:MovimientosViewModel"
+             x:Name="ListaMovimientos"
+             Title="Movimientos">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing"
+                                        BindingContext="{Binding Path=BindingContext, Source={x:Reference ListaMovimientos}, x:DataType=ContentPage}"
+                                        Command="{Binding AppearingCommand}"/>
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <converters:BoolToArrowIconConverter x:Key="BoolToArrowIcon"/>
+        <converters:BoolToColorConverter x:Key="BoolToColor"/>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,Auto,*"
+          RowSpacing="5"
+          ColumnDefinitions="*,*"
+          ColumnSpacing="5"
+          Padding="5">
+
+        <Picker Grid.Row="0" Grid.Column="0"
+                Title="Mes"
+                HorizontalTextAlignment="Center"
+                ItemsSource="{Binding Meses}"
+                ItemDisplayBinding="{Binding Nombre}"
+                SelectedItem="{Binding MesSeleccionado}"
+                IsEnabled="{Binding IsNotBusy}"/>
+
+        <Picker Grid.Row="0" Grid.Column="1"
+                Title="Año"
+                HorizontalTextAlignment="Center"
+                ItemsSource="{Binding Anios}"
+                SelectedItem="{Binding AnioSeleccionado}"
+                IsEnabled="{Binding IsNotBusy}"/>
+
+        <Picker Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                Title="Rubro"
+                HorizontalTextAlignment="Center"
+                ItemsSource="{Binding Rubros}"
+                ItemDisplayBinding="{Binding Nombre}"
+                SelectedItem="{Binding RubroSeleccionado}"
+                IsEnabled="{Binding IsNotBusy}"/>
+
+        <CollectionView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                        x:Name="Lista"
+                        EmptyView="{Binding TextEmptyView}"
+                        ItemsSource="{Binding Movimientos}"
+                        RemainingItemsThreshold="4"
+                        RemainingItemsThresholdReachedCommand="{Binding CargarMasMovimientosCommand}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="8"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="modelDTO:MovimientoDetalleDTO">
+                    <Border StrokeThickness="0"
+                            Background="{StaticResource White}">
+                        <Grid RowDefinitions="Auto,Auto"
+                              RowSpacing="5"
+                              ColumnDefinitions="Auto,*,*,Auto"
+                              ColumnSpacing="5">
+                            <Label Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding Fecha, StringFormat='{}{0:dd/MM/yyyy}'}"/>
+                            <Label Grid.Row="0" Grid.Column="1"
+                                   Text="{Binding ImporteFormateado, StringFormat='{} {0}'}"
+                                   TextColor="{Binding EsIngreso, Converter={StaticResource BoolToColor}}"
+                                   FontAttributes="Bold"/>
+                            <Label Grid.Row="0" Grid.Column="2"
+                                   Text="{Binding RubroNombre, StringFormat='{}Rubro: {0}'}"/>
+                            <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="3"
+                                   WidthRequest="30"
+                                   HeightRequest="30">
+                                <Image.Source>
+                                    <FontImageSource FontFamily="MaterialIcons"
+                                                     Glyph="{Binding EsIngreso, Converter={StaticResource BoolToArrowIcon}}"
+                                                     Color="{Binding EsIngreso, Converter={StaticResource BoolToColor}}"/>
+                                </Image.Source>
+                            </Image>
+                            <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                   Text="{Binding Detalle, StringFormat='{}Detalle: {0}'}"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.Footer>
+                <VerticalStackLayout>
+                    <ActivityIndicator IsVisible="{Binding IsBusy}"
+                                       IsRunning="{Binding IsBusy}"
+                                       HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.Footer>
+        </CollectionView>
+    </Grid>
+    
+</ContentPage>
